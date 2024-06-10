@@ -1,0 +1,722 @@
+# module vfann
+
+
+## Contents
+- [Constants](#Constants)
+- [create_from_file](#create_from_file)
+- [create_shortcut](#create_shortcut)
+- [create_sparse](#create_sparse)
+- [create_standard](#create_standard)
+- [create_train](#create_train)
+- [create_train_array](#create_train_array)
+- [create_train_from_callback](#create_train_from_callback)
+- [create_train_pointer_array](#create_train_pointer_array)
+- [disable_seed_rand](#disable_seed_rand)
+- [enable_seed_rand](#enable_seed_rand)
+- [get_errno](#get_errno)
+- [get_errstr](#get_errstr)
+- [print_error](#print_error)
+- [read_train_from_file](#read_train_from_file)
+- [reset_errno](#reset_errno)
+- [reset_errstr](#reset_errstr)
+- [set_error_log](#set_error_log)
+- [CALLBACK](#CALLBACK)
+- [FANN](#FANN)
+  - [cascadetrain_on_data](#cascadetrain_on_data)
+  - [cascadetrain_on_file](#cascadetrain_on_file)
+  - [clear_scaling_params](#clear_scaling_params)
+  - [copy](#copy)
+  - [descale_input](#descale_input)
+  - [descale_output](#descale_output)
+  - [descale_train](#descale_train)
+  - [destroy](#destroy)
+  - [get_activation_function](#get_activation_function)
+  - [get_activation_steepness](#get_activation_steepness)
+  - [get_bias_array](#get_bias_array)
+  - [get_bit_fail](#get_bit_fail)
+  - [get_bit_fail_limit](#get_bit_fail_limit)
+  - [get_cascade_activation_functions](#get_cascade_activation_functions)
+  - [get_cascade_activation_functions_count](#get_cascade_activation_functions_count)
+  - [get_cascade_activation_steepnesses](#get_cascade_activation_steepnesses)
+  - [get_cascade_activation_steepnesses_count](#get_cascade_activation_steepnesses_count)
+  - [get_cascade_candidate_change_fraction](#get_cascade_candidate_change_fraction)
+  - [get_cascade_candidate_limit](#get_cascade_candidate_limit)
+  - [get_cascade_candidate_stagnation_epochs](#get_cascade_candidate_stagnation_epochs)
+  - [get_cascade_max_cand_epochs](#get_cascade_max_cand_epochs)
+  - [get_cascade_max_out_epochs](#get_cascade_max_out_epochs)
+  - [get_cascade_min_cand_epochs](#get_cascade_min_cand_epochs)
+  - [get_cascade_min_out_epochs](#get_cascade_min_out_epochs)
+  - [get_cascade_num_candidate_groups](#get_cascade_num_candidate_groups)
+  - [get_cascade_num_candidates](#get_cascade_num_candidates)
+  - [get_cascade_output_change_fraction](#get_cascade_output_change_fraction)
+  - [get_cascade_output_stagnation_epochs](#get_cascade_output_stagnation_epochs)
+  - [get_cascade_weight_multiplier](#get_cascade_weight_multiplier)
+  - [get_connection_array](#get_connection_array)
+  - [get_connection_rate](#get_connection_rate)
+  - [get_decimal_point](#get_decimal_point)
+  - [get_layer_array](#get_layer_array)
+  - [get_learning_momentum](#get_learning_momentum)
+  - [get_learning_rate](#get_learning_rate)
+  - [get_mse](#get_mse)
+  - [get_multiplier](#get_multiplier)
+  - [get_network_type](#get_network_type)
+  - [get_num_input](#get_num_input)
+  - [get_num_layers](#get_num_layers)
+  - [get_num_output](#get_num_output)
+  - [get_quickprop_decay](#get_quickprop_decay)
+  - [get_quickprop_mu](#get_quickprop_mu)
+  - [get_rprop_decrease_factor](#get_rprop_decrease_factor)
+  - [get_rprop_delta_max](#get_rprop_delta_max)
+  - [get_rprop_delta_min](#get_rprop_delta_min)
+  - [get_rprop_delta_zero](#get_rprop_delta_zero)
+  - [get_rprop_increase_factor](#get_rprop_increase_factor)
+  - [get_sarprop_step_error_shift](#get_sarprop_step_error_shift)
+  - [get_sarprop_step_error_threshold_factor](#get_sarprop_step_error_threshold_factor)
+  - [get_sarprop_temperature](#get_sarprop_temperature)
+  - [get_sarprop_weight_decay_shift](#get_sarprop_weight_decay_shift)
+  - [get_total_connections](#get_total_connections)
+  - [get_total_neurons](#get_total_neurons)
+  - [get_train_error_function](#get_train_error_function)
+  - [get_train_stop_function](#get_train_stop_function)
+  - [get_training_algorithm](#get_training_algorithm)
+  - [get_user_data](#get_user_data)
+  - [get_weights](#get_weights)
+  - [init_weights](#init_weights)
+  - [print_connections](#print_connections)
+  - [print_parameters](#print_parameters)
+  - [randomize_weights](#randomize_weights)
+  - [reset_mse](#reset_mse)
+  - [run](#run)
+  - [save](#save)
+  - [save_to_fixed](#save_to_fixed)
+  - [scale_input](#scale_input)
+  - [scale_output](#scale_output)
+  - [scale_train](#scale_train)
+  - [set_activation_function](#set_activation_function)
+  - [set_activation_function_hidden](#set_activation_function_hidden)
+  - [set_activation_function_layer](#set_activation_function_layer)
+  - [set_activation_function_output](#set_activation_function_output)
+  - [set_activation_steepness](#set_activation_steepness)
+  - [set_activation_steepness_hidden](#set_activation_steepness_hidden)
+  - [set_activation_steepness_layer](#set_activation_steepness_layer)
+  - [set_activation_steepness_output](#set_activation_steepness_output)
+  - [set_bit_fail_limit](#set_bit_fail_limit)
+  - [set_callback](#set_callback)
+  - [set_cascade_activation_functions](#set_cascade_activation_functions)
+  - [set_cascade_activation_steepnesses](#set_cascade_activation_steepnesses)
+  - [set_cascade_candidate_change_fraction](#set_cascade_candidate_change_fraction)
+  - [set_cascade_candidate_limit](#set_cascade_candidate_limit)
+  - [set_cascade_candidate_stagnation_epochs](#set_cascade_candidate_stagnation_epochs)
+  - [set_cascade_max_cand_epochs](#set_cascade_max_cand_epochs)
+  - [set_cascade_max_out_epochs](#set_cascade_max_out_epochs)
+  - [set_cascade_min_cand_epochs](#set_cascade_min_cand_epochs)
+  - [set_cascade_min_out_epochs](#set_cascade_min_out_epochs)
+  - [set_cascade_num_candidate_groups](#set_cascade_num_candidate_groups)
+  - [set_cascade_output_change_fraction](#set_cascade_output_change_fraction)
+  - [set_cascade_output_stagnation_epochs](#set_cascade_output_stagnation_epochs)
+  - [set_cascade_weight_multiplier](#set_cascade_weight_multiplier)
+  - [set_input_scaling_params](#set_input_scaling_params)
+  - [set_learning_momentum](#set_learning_momentum)
+  - [set_learning_rate](#set_learning_rate)
+  - [set_output_scaling_params](#set_output_scaling_params)
+  - [set_quickprop_decay](#set_quickprop_decay)
+  - [set_quickprop_mu](#set_quickprop_mu)
+  - [set_rprop_decrease_factor](#set_rprop_decrease_factor)
+  - [set_rprop_delta_max](#set_rprop_delta_max)
+  - [set_rprop_delta_min](#set_rprop_delta_min)
+  - [set_rprop_delta_zero](#set_rprop_delta_zero)
+  - [set_rprop_increase_factor](#set_rprop_increase_factor)
+  - [set_sarprop_step_error_shift](#set_sarprop_step_error_shift)
+  - [set_sarprop_step_error_threshold_factor](#set_sarprop_step_error_threshold_factor)
+  - [set_sarprop_temperature](#set_sarprop_temperature)
+  - [set_sarprop_weight_decay_shift](#set_sarprop_weight_decay_shift)
+  - [set_scaling_params](#set_scaling_params)
+  - [set_train_error_function](#set_train_error_function)
+  - [set_train_stop_function](#set_train_stop_function)
+  - [set_training_algorithm](#set_training_algorithm)
+  - [set_user_data](#set_user_data)
+  - [set_weight](#set_weight)
+  - [set_weight_array](#set_weight_array)
+  - [set_weights](#set_weights)
+  - [test](#test)
+  - [test_data](#test_data)
+  - [train](#train)
+  - [train_epoch](#train_epoch)
+  - [train_epoch_batch_parallel](#train_epoch_batch_parallel)
+  - [train_epoch_incremental_mod](#train_epoch_incremental_mod)
+  - [train_epoch_irpropm_parallel](#train_epoch_irpropm_parallel)
+  - [train_epoch_quickprop_parallel](#train_epoch_quickprop_parallel)
+  - [train_epoch_sarprop_parallel](#train_epoch_sarprop_parallel)
+  - [train_on_data](#train_on_data)
+  - [train_on_file](#train_on_file)
+- [FANN_CALLBACK_TYPE](#FANN_CALLBACK_TYPE)
+- [FANN_CONNECTION](#FANN_CONNECTION)
+- [FANN_ERROR](#FANN_ERROR)
+- [FANN_TRAIN_DATA](#FANN_TRAIN_DATA)
+  - [destroy_train](#destroy_train)
+  - [get_train_input](#get_train_input)
+  - [get_train_output](#get_train_output)
+  - [shuffle_train_data](#shuffle_train_data)
+  - [get_min_train_input](#get_min_train_input)
+  - [get_max_train_input](#get_max_train_input)
+  - [get_min_train_output](#get_min_train_output)
+  - [get_max_train_output](#get_max_train_output)
+  - [scale_input_train_data](#scale_input_train_data)
+  - [scale_output_train_data](#scale_output_train_data)
+  - [scale_train_data](#scale_train_data)
+  - [merge_train_data](#merge_train_data)
+  - [duplicate_train_data](#duplicate_train_data)
+  - [subset_train_data](#subset_train_data)
+  - [length_train_data](#length_train_data)
+  - [num_input_train_data](#num_input_train_data)
+  - [num_output_train_data](#num_output_train_data)
+  - [save_train](#save_train)
+  - [save_train_to_fixed](#save_train_to_fixed)
+- [FANN_TYPE](#FANN_TYPE)
+- [FANN_ACTIVATIONFUNC_ENUM](#FANN_ACTIVATIONFUNC_ENUM)
+- [FANN_ERRNO_ENUM](#FANN_ERRNO_ENUM)
+- [FANN_ERRORFUNC_ENUM](#FANN_ERRORFUNC_ENUM)
+- [FANN_NETTYPE_ENUM](#FANN_NETTYPE_ENUM)
+- [FANN_STOPFUNC_ENUM](#FANN_STOPFUNC_ENUM)
+- [FANN_TRAIN_ENUM](#FANN_TRAIN_ENUM)
+
+## Constants
+[[Return to contents]](#Contents)
+
+[[Return to contents]](#Contents)
+
+[[Return to contents]](#Contents)
+
+[[Return to contents]](#Contents)
+
+[[Return to contents]](#Contents)
+
+## create_from_file
+[[Return to contents]](#Contents)
+
+## create_shortcut
+[[Return to contents]](#Contents)
+
+## create_sparse
+[[Return to contents]](#Contents)
+
+## create_standard
+[[Return to contents]](#Contents)
+
+## create_train
+[[Return to contents]](#Contents)
+
+## create_train_array
+[[Return to contents]](#Contents)
+
+## create_train_from_callback
+[[Return to contents]](#Contents)
+
+## create_train_pointer_array
+[[Return to contents]](#Contents)
+
+## disable_seed_rand
+[[Return to contents]](#Contents)
+
+## enable_seed_rand
+[[Return to contents]](#Contents)
+
+## get_errno
+[[Return to contents]](#Contents)
+
+## get_errstr
+[[Return to contents]](#Contents)
+
+## print_error
+[[Return to contents]](#Contents)
+
+## read_train_from_file
+[[Return to contents]](#Contents)
+
+## reset_errno
+[[Return to contents]](#Contents)
+
+## reset_errstr
+[[Return to contents]](#Contents)
+
+## set_error_log
+[[Return to contents]](#Contents)
+
+## CALLBACK
+[[Return to contents]](#Contents)
+
+## FANN
+[[Return to contents]](#Contents)
+
+## cascadetrain_on_data
+[[Return to contents]](#Contents)
+
+## cascadetrain_on_file
+[[Return to contents]](#Contents)
+
+## clear_scaling_params
+[[Return to contents]](#Contents)
+
+## copy
+[[Return to contents]](#Contents)
+
+## descale_input
+[[Return to contents]](#Contents)
+
+## descale_output
+[[Return to contents]](#Contents)
+
+## descale_train
+[[Return to contents]](#Contents)
+
+## destroy
+[[Return to contents]](#Contents)
+
+## get_activation_function
+[[Return to contents]](#Contents)
+
+## get_activation_steepness
+[[Return to contents]](#Contents)
+
+## get_bias_array
+[[Return to contents]](#Contents)
+
+## get_bit_fail
+[[Return to contents]](#Contents)
+
+## get_bit_fail_limit
+[[Return to contents]](#Contents)
+
+## get_cascade_activation_functions
+[[Return to contents]](#Contents)
+
+## get_cascade_activation_functions_count
+[[Return to contents]](#Contents)
+
+## get_cascade_activation_steepnesses
+[[Return to contents]](#Contents)
+
+## get_cascade_activation_steepnesses_count
+[[Return to contents]](#Contents)
+
+## get_cascade_candidate_change_fraction
+[[Return to contents]](#Contents)
+
+## get_cascade_candidate_limit
+[[Return to contents]](#Contents)
+
+## get_cascade_candidate_stagnation_epochs
+[[Return to contents]](#Contents)
+
+## get_cascade_max_cand_epochs
+[[Return to contents]](#Contents)
+
+## get_cascade_max_out_epochs
+[[Return to contents]](#Contents)
+
+## get_cascade_min_cand_epochs
+[[Return to contents]](#Contents)
+
+## get_cascade_min_out_epochs
+[[Return to contents]](#Contents)
+
+## get_cascade_num_candidate_groups
+[[Return to contents]](#Contents)
+
+## get_cascade_num_candidates
+[[Return to contents]](#Contents)
+
+## get_cascade_output_change_fraction
+[[Return to contents]](#Contents)
+
+## get_cascade_output_stagnation_epochs
+[[Return to contents]](#Contents)
+
+## get_cascade_weight_multiplier
+[[Return to contents]](#Contents)
+
+## get_connection_array
+[[Return to contents]](#Contents)
+
+## get_connection_rate
+[[Return to contents]](#Contents)
+
+## get_decimal_point
+[[Return to contents]](#Contents)
+
+## get_layer_array
+[[Return to contents]](#Contents)
+
+## get_learning_momentum
+[[Return to contents]](#Contents)
+
+## get_learning_rate
+[[Return to contents]](#Contents)
+
+## get_mse
+[[Return to contents]](#Contents)
+
+## get_multiplier
+[[Return to contents]](#Contents)
+
+## get_network_type
+[[Return to contents]](#Contents)
+
+## get_num_input
+[[Return to contents]](#Contents)
+
+## get_num_layers
+[[Return to contents]](#Contents)
+
+## get_num_output
+[[Return to contents]](#Contents)
+
+## get_quickprop_decay
+[[Return to contents]](#Contents)
+
+## get_quickprop_mu
+[[Return to contents]](#Contents)
+
+## get_rprop_decrease_factor
+[[Return to contents]](#Contents)
+
+## get_rprop_delta_max
+[[Return to contents]](#Contents)
+
+## get_rprop_delta_min
+[[Return to contents]](#Contents)
+
+## get_rprop_delta_zero
+[[Return to contents]](#Contents)
+
+## get_rprop_increase_factor
+[[Return to contents]](#Contents)
+
+## get_sarprop_step_error_shift
+[[Return to contents]](#Contents)
+
+## get_sarprop_step_error_threshold_factor
+[[Return to contents]](#Contents)
+
+## get_sarprop_temperature
+[[Return to contents]](#Contents)
+
+## get_sarprop_weight_decay_shift
+[[Return to contents]](#Contents)
+
+## get_total_connections
+[[Return to contents]](#Contents)
+
+## get_total_neurons
+[[Return to contents]](#Contents)
+
+## get_train_error_function
+[[Return to contents]](#Contents)
+
+## get_train_stop_function
+[[Return to contents]](#Contents)
+
+## get_training_algorithm
+[[Return to contents]](#Contents)
+
+## get_user_data
+[[Return to contents]](#Contents)
+
+## get_weights
+[[Return to contents]](#Contents)
+
+## init_weights
+[[Return to contents]](#Contents)
+
+## print_connections
+[[Return to contents]](#Contents)
+
+## print_parameters
+[[Return to contents]](#Contents)
+
+## randomize_weights
+[[Return to contents]](#Contents)
+
+## reset_mse
+[[Return to contents]](#Contents)
+
+## run
+[[Return to contents]](#Contents)
+
+## save
+[[Return to contents]](#Contents)
+
+## save_to_fixed
+[[Return to contents]](#Contents)
+
+## scale_input
+[[Return to contents]](#Contents)
+
+## scale_output
+[[Return to contents]](#Contents)
+
+## scale_train
+[[Return to contents]](#Contents)
+
+## set_activation_function
+[[Return to contents]](#Contents)
+
+## set_activation_function_hidden
+[[Return to contents]](#Contents)
+
+## set_activation_function_layer
+[[Return to contents]](#Contents)
+
+## set_activation_function_output
+[[Return to contents]](#Contents)
+
+## set_activation_steepness
+[[Return to contents]](#Contents)
+
+## set_activation_steepness_hidden
+[[Return to contents]](#Contents)
+
+## set_activation_steepness_layer
+[[Return to contents]](#Contents)
+
+## set_activation_steepness_output
+[[Return to contents]](#Contents)
+
+## set_bit_fail_limit
+[[Return to contents]](#Contents)
+
+## set_callback
+[[Return to contents]](#Contents)
+
+## set_cascade_activation_functions
+[[Return to contents]](#Contents)
+
+## set_cascade_activation_steepnesses
+[[Return to contents]](#Contents)
+
+## set_cascade_candidate_change_fraction
+[[Return to contents]](#Contents)
+
+## set_cascade_candidate_limit
+[[Return to contents]](#Contents)
+
+## set_cascade_candidate_stagnation_epochs
+[[Return to contents]](#Contents)
+
+## set_cascade_max_cand_epochs
+[[Return to contents]](#Contents)
+
+## set_cascade_max_out_epochs
+[[Return to contents]](#Contents)
+
+## set_cascade_min_cand_epochs
+[[Return to contents]](#Contents)
+
+## set_cascade_min_out_epochs
+[[Return to contents]](#Contents)
+
+## set_cascade_num_candidate_groups
+[[Return to contents]](#Contents)
+
+## set_cascade_output_change_fraction
+[[Return to contents]](#Contents)
+
+## set_cascade_output_stagnation_epochs
+[[Return to contents]](#Contents)
+
+## set_cascade_weight_multiplier
+[[Return to contents]](#Contents)
+
+## set_input_scaling_params
+[[Return to contents]](#Contents)
+
+## set_learning_momentum
+[[Return to contents]](#Contents)
+
+## set_learning_rate
+[[Return to contents]](#Contents)
+
+## set_output_scaling_params
+[[Return to contents]](#Contents)
+
+## set_quickprop_decay
+[[Return to contents]](#Contents)
+
+## set_quickprop_mu
+[[Return to contents]](#Contents)
+
+## set_rprop_decrease_factor
+[[Return to contents]](#Contents)
+
+## set_rprop_delta_max
+[[Return to contents]](#Contents)
+
+## set_rprop_delta_min
+[[Return to contents]](#Contents)
+
+## set_rprop_delta_zero
+[[Return to contents]](#Contents)
+
+## set_rprop_increase_factor
+[[Return to contents]](#Contents)
+
+## set_sarprop_step_error_shift
+[[Return to contents]](#Contents)
+
+## set_sarprop_step_error_threshold_factor
+[[Return to contents]](#Contents)
+
+## set_sarprop_temperature
+[[Return to contents]](#Contents)
+
+## set_sarprop_weight_decay_shift
+[[Return to contents]](#Contents)
+
+## set_scaling_params
+[[Return to contents]](#Contents)
+
+## set_train_error_function
+[[Return to contents]](#Contents)
+
+## set_train_stop_function
+[[Return to contents]](#Contents)
+
+## set_training_algorithm
+[[Return to contents]](#Contents)
+
+## set_user_data
+[[Return to contents]](#Contents)
+
+## set_weight
+[[Return to contents]](#Contents)
+
+## set_weight_array
+[[Return to contents]](#Contents)
+
+## set_weights
+[[Return to contents]](#Contents)
+
+## test
+[[Return to contents]](#Contents)
+
+## test_data
+[[Return to contents]](#Contents)
+
+## train
+[[Return to contents]](#Contents)
+
+## train_epoch
+[[Return to contents]](#Contents)
+
+## train_epoch_batch_parallel
+[[Return to contents]](#Contents)
+
+## train_epoch_incremental_mod
+[[Return to contents]](#Contents)
+
+## train_epoch_irpropm_parallel
+[[Return to contents]](#Contents)
+
+## train_epoch_quickprop_parallel
+[[Return to contents]](#Contents)
+
+## train_epoch_sarprop_parallel
+[[Return to contents]](#Contents)
+
+## train_on_data
+[[Return to contents]](#Contents)
+
+## train_on_file
+[[Return to contents]](#Contents)
+
+## FANN_CALLBACK_TYPE
+[[Return to contents]](#Contents)
+
+## FANN_CONNECTION
+[[Return to contents]](#Contents)
+
+## FANN_ERROR
+[[Return to contents]](#Contents)
+
+## FANN_TRAIN_DATA
+[[Return to contents]](#Contents)
+
+## destroy_train
+[[Return to contents]](#Contents)
+
+## get_train_input
+[[Return to contents]](#Contents)
+
+## get_train_output
+[[Return to contents]](#Contents)
+
+## shuffle_train_data
+[[Return to contents]](#Contents)
+
+## get_min_train_input
+[[Return to contents]](#Contents)
+
+## get_max_train_input
+[[Return to contents]](#Contents)
+
+## get_min_train_output
+[[Return to contents]](#Contents)
+
+## get_max_train_output
+[[Return to contents]](#Contents)
+
+## scale_input_train_data
+[[Return to contents]](#Contents)
+
+## scale_output_train_data
+[[Return to contents]](#Contents)
+
+## scale_train_data
+[[Return to contents]](#Contents)
+
+## merge_train_data
+[[Return to contents]](#Contents)
+
+## duplicate_train_data
+[[Return to contents]](#Contents)
+
+## subset_train_data
+[[Return to contents]](#Contents)
+
+## length_train_data
+[[Return to contents]](#Contents)
+
+## num_input_train_data
+[[Return to contents]](#Contents)
+
+## num_output_train_data
+[[Return to contents]](#Contents)
+
+## save_train
+[[Return to contents]](#Contents)
+
+## save_train_to_fixed
+[[Return to contents]](#Contents)
+
+## FANN_TYPE
+[[Return to contents]](#Contents)
+
+## FANN_ACTIVATIONFUNC_ENUM
+[[Return to contents]](#Contents)
+
+## FANN_ERRNO_ENUM
+[[Return to contents]](#Contents)
+
+## FANN_ERRORFUNC_ENUM
+[[Return to contents]](#Contents)
+
+## FANN_NETTYPE_ENUM
+[[Return to contents]](#Contents)
+
+## FANN_STOPFUNC_ENUM
+[[Return to contents]](#Contents)
+
+## FANN_TRAIN_ENUM
+[[Return to contents]](#Contents)
+
+#### Powered by vdoc. Generated on: 9 Jun 2024 22:48:56
